@@ -1,0 +1,19 @@
+{
+  "sensor_name": "co2",
+  "device_id": "roomnode-01",
+  "bus_type": "i2c",
+  "bus_address": 90,
+  "power_pin": 22,
+  "unit": "ppm",
+  "calibration": {
+    "method": "baseline",
+    "factor": 1.0,
+    "offset": 0
+  },
+  "tolerances": {
+    "warmup_seconds": 20,
+    "burn_in_hours": 48
+  },
+  "physical_range": {"min": 400, "max": 8192},
+  "notes": "CCS811 liefert eCO2 als Integer-ppm. I2C-Adresse 0x5A = 90."
+}

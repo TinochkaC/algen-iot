@@ -1,0 +1,65 @@
+# =============================================================================
+# Systemd-Unit: Reaktor-Sensorerfassung
+# =============================================================================
+# Installation auf dem Raspberry Pi:
+#   sudo cp deploy/systemd/algen-capture-reactor.service /etc/systemd/system/
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable --now algen-capture-reactor
+#
+# Status pruefen:
+#   sudo systemctl status algen-capture-reactor
+#   sudo journalctl -u algen-capture-reactor -f
+# =============================================================================
+
+[Unit]
+Description=Algen-IoT - Reaktor-Sensorerfassung (capture_reactor_sensors)
+Documentation=https://github.com/IHR-USER/algen-iot/tree/main/docs
+After=network-online.target influxdb.service mosquitto.service
+Wants=network-online.target
+Requires=influxdb.service mosquitto.service
+
+[Service]
+Type=simple
+User=algen
+Group=algen
+
+# Umgebungsvariablen (Tokens, Passwoerter) aus geschuetzter Datei laden
+EnvironmentFile=/etc/algen_iot/algen.env
+
+# Pfad zur installierten algen-iot-Paket-Konsole
+ExecStart=/opt/algen-iot/.venv/bin/algen-capture-reactor
+WorkingDirectory=/opt/algen-iot
+
+# Automatisch neu starten bei Crash, max. 5 Versuche pro 60s
+Restart=on-failure
+RestartSec=10
+StartLimitBurst=5
+StartLimitIntervalSec=60
+
+# Sauberer Shutdown (Skript bekommt 30s zum Aufraeumen)
+KillSignal=SIGTERM
+TimeoutStopSec=30
+
+# Logs gehen in journald (zusaetzlich zu /var/log/algen_iot/)
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=algen-capture-reactor
+
+# Sicherheits-Hardening
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ReadWritePaths=/var/log/algen_iot /etc/algen_iot
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictNamespaces=true
+RestrictRealtime=true
+RestrictSUIDSGID=true
+
+# GPIO-Zugriff: Pi-User braucht Mitgliedschaft in gpio-Gruppe
+SupplementaryGroups=gpio spi i2c
+
+[Install]
+WantedBy=multi-user.target

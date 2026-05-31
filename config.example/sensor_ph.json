@@ -1,0 +1,22 @@
+{
+  "sensor_name": "ph",
+  "device_id": "reactor-01",
+  "bus_type": "spi-adc",
+  "bus_address": 0,
+  "power_pin": null,
+  "unit": "pH",
+  "calibration": {
+    "method": "linear-two-point",
+    "factor": 3.5,
+    "offset": 0.0,
+    "reference_points": [
+      {"voltage_v": 1.36, "ph": 7.0},
+      {"voltage_v": 2.02, "ph": 4.0}
+    ]
+  },
+  "tolerances": {
+    "max_drift_per_day": 0.1,
+    "calibration_interval_days": 30
+  },
+  "physical_range": {"min": 0.0, "max": 14.0}
+}

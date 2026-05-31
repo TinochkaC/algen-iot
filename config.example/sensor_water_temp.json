@@ -1,0 +1,17 @@
+{
+  "sensor_name": "water_temp",
+  "device_id": "reactor-01",
+  "bus_type": "1-wire",
+  "bus_address": "28-0000071c2b3a",
+  "power_pin": null,
+  "unit": "C",
+  "calibration": {
+    "method": "none",
+    "factor": 1.0,
+    "offset": 0.0
+  },
+  "tolerances": {
+    "accuracy_c": 0.5
+  },
+  "physical_range": {"min": -55.0, "max": 125.0}
+}
